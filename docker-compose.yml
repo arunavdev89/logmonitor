@@ -1,0 +1,20 @@
+version: "3"
+services:
+  prometheus:
+    image: quay.io/prometheus/prometheus:latest
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+
+  accesslogmonitor:
+    image: arunavdev89/access-log-monitor:0.2
+    environment:
+      - logfile
+      - prometheus_server=http://prometheus:9090
+    ports:
+      - 8080:8080
+    volumes:
+      - "${logfile}:/var/log/access.log"
